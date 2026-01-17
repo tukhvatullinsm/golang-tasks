@@ -35,14 +35,14 @@ func CastTo(spell Spell, object interface{}) {
 	sourceValue := reflect.ValueOf(spell.Value())
 	switch spell.Name() {
 	case "fire":
-		fieldValue := gameObjValue.FieldByName("Health")
+		fieldValue := gameObjValue.FieldByName(spell.Char())
 		if fieldValue.IsValid() && fieldValue.CanSet() {
 			currentValue := fieldValue.Int()
 			result = currentValue + sourceValue.Int()
 			fieldValue.SetInt(result)
 		}
 	case "protect":
-		fieldValue := gameObjValue.FieldByName("Durability")
+		fieldValue := gameObjValue.FieldByName(spell.Char())
 		if fieldValue.IsValid() && fieldValue.CanSet() {
 			currentValue := fieldValue.Int()
 			result = currentValue + sourceValue.Int()
