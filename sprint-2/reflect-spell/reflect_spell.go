@@ -1,5 +1,11 @@
 package reflect_spell
 
+import (
+	//"fmt"
+	"log"
+	"reflect"
+)
+
 type Spell interface {
 	// название заклинания
 	Name() string
@@ -21,7 +27,31 @@ func CastToAll(spell Spell, objects []interface{}) {
 }
 
 func CastTo(spell Spell, object interface{}) {
-	// реализуйте эту функцию.
+	var result int64
+	gameObjValue := reflect.ValueOf(object).Elem()
+	if !gameObjValue.CanSet() {
+		log.Fatalln("Object is not settable")
+	}
+	sourceValue := reflect.ValueOf(spell.Value())
+	switch spell.Name() {
+	case "fire":
+		fieldValue := gameObjValue.FieldByName(spell.Char())
+		if fieldValue.IsValid() && fieldValue.CanSet() {
+			currentValue := fieldValue.Int()
+			result = currentValue + sourceValue.Int()
+			fieldValue.SetInt(result)
+		}
+	case "protect":
+		fieldValue := gameObjValue.FieldByName(spell.Char())
+		if fieldValue.IsValid() && fieldValue.CanSet() {
+			currentValue := fieldValue.Int()
+			result = currentValue + sourceValue.Int()
+			fieldValue.SetInt(result)
+		}
+	default:
+		log.Fatal("Unknown field")
+	}
+
 }
 
 type spell struct {
